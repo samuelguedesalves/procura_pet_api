@@ -7,6 +7,11 @@ defmodule ProcuraPetWeb.Router do
 
   scope "/api", ProcuraPetWeb do
     pipe_through :api
+
+    post "/signup", AccountController, :create_account
+    post "/login", AccountController, :login
+
+    resources "/users", AccountController
   end
 
   # Enables LiveDashboard only for development

@@ -20,3 +20,7 @@ config :procura_pet, ProcuraPetWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# config :bcrypt_elixir, log_rounds: 4
+
+# config :joken, default_signer: "secret"
