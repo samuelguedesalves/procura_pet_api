@@ -116,11 +116,5 @@ defmodule ProcuraPet.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user_by_email(email) do
-    query =
-      from u in User,
-        where: u.email == ^email
-
-    Repo.one(query)
-  end
+  def get_user_by_email(email), do: Repo.get_by(User, email: email)
 end

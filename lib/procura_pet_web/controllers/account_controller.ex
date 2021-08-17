@@ -3,20 +3,21 @@ defmodule ProcuraPetWeb.AccountController do
   alias ProcuraPet.{Accounts, Authentication}
 
   def login(conn, %{"email" => email, "password" => password}) do
-    with {:ok, %{token: token, user: user}} <-
-           Authentication.auth_user(%{email: email, password: password}) do
-      conn
-      |> put_status(:ok)
-      |> json(%{user: user, token: token})
-    else
-      {:error, reason} -> conn |> put_status(:bad_request) |> json(%{error: reason})
+    case Authentication.auth_user(email, password) do
+      {:ok, %{token: token, user: user}} ->
+        conn
+        |> put_status(:ok)
+        |> json(%{user: user, token: token})
+
+      {:error, reason} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: reason})
     end
   end
 
   def create_account(conn, account) do
-    account
-    |> Accounts.create_user()
-    |> case do
+    case Accounts.create_user(account) do
       {:ok, user} ->
         conn
         |> put_status(:ok)
@@ -25,7 +26,7 @@ defmodule ProcuraPetWeb.AccountController do
       {:error, _reason} ->
         conn
         |> put_status(:bad_request)
-        |> json(%{"error" => "error at create a new user"})
+        |> json(%{error: "error at create a new user"})
     end
   end
 end

@@ -3,7 +3,7 @@ defmodule ProcuraPet.Accounts.User do
   import Ecto.Changeset
   # alias Bcrypt.Base
 
-  @derive {Jason.Encoder, only: [:id, :name, :email, :age, :inserted_at, :updated_at]}
+  @derive {Jason.Encoder, except: [:__meta__, :__struct__]}
   schema "users" do
     field :age, :integer
     field :email, :string
@@ -19,7 +19,6 @@ defmodule ProcuraPet.Accounts.User do
     |> cast(attrs, [:name, :email, :age, :password])
     |> validate_required([:name, :email, :age, :password])
     |> validate_format(:email, ~r/@/)
-    |> IO.inspect()
     |> put_pass_hash()
     |> unique_constraint(:email)
   end
