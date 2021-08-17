@@ -19,7 +19,6 @@ defmodule ProcuraPet.Accounts.User do
     |> cast(attrs, [:name, :email, :age, :password])
     |> validate_required([:name, :email, :age, :password])
     |> validate_format(:email, ~r/@/)
-    |> IO.inspect()
     |> put_pass_hash()
     |> unique_constraint(:email)
   end
