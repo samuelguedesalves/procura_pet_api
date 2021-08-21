@@ -16,7 +16,8 @@ defmodule ProcuraPet.Authentication do
   @spec auth_user(String.t(), String.t()) ::
           {:ok, %{token: String.t(), user: %User{}}} | {:error, String.t()}
   def auth_user(email, password) do
-    with {:ok, %{id: user_id, password: hash_pass}} <- Accounts.get_user_by_email(email),
+    with %User{} = user <- Accounts.get_user_by_email(email),
+         %{id: user_id, password: hash_pass} <- user,
          true <- Bcrypt.verify_pass(password, hash_pass),
          {:ok, token, _} <- Token.generate_and_sign(%{user_id: user_id}) do
       {:ok, %{token: token, user: user}}
