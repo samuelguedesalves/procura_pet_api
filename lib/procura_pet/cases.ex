@@ -101,4 +101,21 @@ defmodule ProcuraPet.Cases do
   def change_case(%Case{} = case, attrs \\ %{}) do
     Case.changeset(case, attrs)
   end
+
+  @doc """
+  Return cases list by user id.
+
+  ## Examples
+
+      iex> list_cases_by_user(1)
+      [%Case{}, ...]
+
+  """
+  def list_cases_by_user(user_id) do
+    query =
+      from c in Case,
+        where: c.user_fk == ^user_id
+
+    Repo.all(query)
+  end
 end
