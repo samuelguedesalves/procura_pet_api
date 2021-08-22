@@ -20,7 +20,7 @@ defmodule ProcuraPetWeb.CaseController do
     end
   end
 
-  def list_cases(conn, _params) do
+  def list_my_cases(conn, _params) do
     with %{assigns: %{user: %{id: user_fk}}} <- conn,
          list_of_cases <- Cases.list_cases_by_user(user_fk) do
       conn |> put_status(:ok) |> json(list_of_cases)
