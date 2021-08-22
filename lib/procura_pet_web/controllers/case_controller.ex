@@ -20,6 +20,15 @@ defmodule ProcuraPetWeb.CaseController do
     end
   end
 
+  def get_case(conn, params) do
+    with %{"id" => case_id} <- params,
+         %Cases.Case{} = case <- Cases.get_case!(case_id) do
+      conn |> put_status(:ok) |> json(case)
+    else
+      _ -> conn |> put_status(:bad_request) |> json(%{error: "occurred a unespected error"})
+    end
+  end
+
   def list_my_cases(conn, _params) do
     with %{assigns: %{user: %{id: user_fk}}} <- conn,
          list_of_cases <- Cases.list_cases_by_user(user_fk) do
