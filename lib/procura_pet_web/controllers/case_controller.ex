@@ -26,7 +26,7 @@ defmodule ProcuraPetWeb.CaseController do
          %Accounts.User{} = user <- Accounts.get_user!(user_id) do
       assign(conn, :user, user)
     else
-      _ -> conn |> put_status(:bad_request) |> json(%{error: "token are missing or not is valid"})
+      _ -> conn |> put_status(:bad_request) |> json(%{error: "token are missing or not is valid"}) |> halt()
     end
   end
 end
