@@ -6,15 +6,17 @@ defmodule ProcuraPetWeb.CaseController do
   plug :introspect
 
   def create(conn, params \\ %{}) do
-    with false <- Enum.empty?(params),
-         {:ok, case} <- Cases.create_case(params) do
+    with %{assigns: %{user: %{id: user_fk}}} <- conn,
+         %{"title" => title, "description" => description} <- params,
+         {:ok, case} <-
+           Cases.create_case(%{
+             "title" => title,
+             "description" => description,
+             "user_fk" => user_fk
+           }) do
       conn |> put_status(:ok) |> json(case)
     else
-      true ->
-        conn |> put_status(:bad_request) |> json(%{error: "empty data"})
-
-      {:error, %Ecto.Changeset{}} ->
-        conn |> put_status(:bad_request) |> json(%{error: "error at create case"})
+      _ -> conn |> put_status(:bad_request) |> json(%{error: "error at create case"})
     end
   end
 
@@ -26,7 +28,11 @@ defmodule ProcuraPetWeb.CaseController do
          %Accounts.User{} = user <- Accounts.get_user!(user_id) do
       assign(conn, :user, user)
     else
-      _ -> conn |> put_status(:bad_request) |> json(%{error: "token are missing or not is valid"}) |> halt()
+      _ ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "token are missing or not is valid"})
+        |> halt()
     end
   end
 end
