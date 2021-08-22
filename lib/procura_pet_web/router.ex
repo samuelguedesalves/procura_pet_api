@@ -11,7 +11,7 @@ defmodule ProcuraPetWeb.Router do
     post "/signup", AccountController, :create_account
     post "/login", AccountController, :login
 
-    resources "/users", AccountController
+    post "/case", CaseController, :create
   end
 
   # Enables LiveDashboard only for development
