@@ -44,7 +44,8 @@ defmodule ProcuraPet.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:joken, "~> 2.0"}
+      {:uuid, "~> 1.1"},
+      {:guardian, "~> 2.0"}
     ]
   end
 

@@ -1,5 +1,5 @@
 defmodule ProcuraPet.Authentication do
-  alias ProcuraPet.{Accounts, Token, Accounts.User}
+  alias ProcuraPet.{Accounts, Guardian, Accounts.User}
 
   @doc """
   Auth user.
@@ -19,7 +19,7 @@ defmodule ProcuraPet.Authentication do
     with %User{} = user <- Accounts.get_user_by_email(email),
          %{id: user_id, password: hash_pass} <- user,
          true <- Bcrypt.verify_pass(password, hash_pass),
-         {:ok, token, _} <- Token.generate_and_sign(%{user_id: user_id}) do
+         {:ok, token, _} <- Guardian.encode_and_sign(%{id: user_id}) do
       {:ok, %{token: token, user: user}}
     else
       {:error, %Ecto.Changeset{} = _changeset} -> {:error, "user not found"}
