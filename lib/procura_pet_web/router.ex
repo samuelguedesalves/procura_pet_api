@@ -14,6 +14,8 @@ defmodule ProcuraPetWeb.Router do
     post "/case", CaseController, :create
     get "/case/my", CaseController, :list_my_cases
     get "/case/:id", CaseController, :get_case
+
+    post "/image", ImageController, :upload_image
   end
 
   # Enables LiveDashboard only for development
