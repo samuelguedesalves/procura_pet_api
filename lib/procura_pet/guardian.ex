@@ -10,6 +10,7 @@ defmodule ProcuraPet.Guardian do
     sub = to_string(id)
     {:ok, sub}
   end
+
   def subject_for_token(_, _) do
     {:error, :reason_for_error}
   end
@@ -22,8 +23,9 @@ defmodule ProcuraPet.Guardian do
       String.to_integer(id)
       |> ProcuraPet.Accounts.get_user!()
 
-    {:ok,  resource}
+    {:ok, resource}
   end
+
   def resource_from_claims(_claims) do
     {:error, :reason_for_error}
   end
