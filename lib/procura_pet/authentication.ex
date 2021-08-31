@@ -14,7 +14,7 @@ defmodule ProcuraPet.Authentication do
 
   """
   @spec auth_user(String.t(), String.t()) ::
-          {:ok, %{token: String.t(), user: %User{}}} | {:error, String.t()}
+          {:ok, %{token: binary(), user: %User{}}} | {:error, String.t()}
   def auth_user(email, password) do
     with %User{} = user <- Accounts.get_user_by_email(email),
          %{id: user_id, password: hash_pass} <- user,
