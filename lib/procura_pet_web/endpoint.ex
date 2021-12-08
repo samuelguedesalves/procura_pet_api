@@ -22,7 +22,7 @@ defmodule ProcuraPetWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/uploads",
-    from: "/media",
+    from: "./uploads",
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
