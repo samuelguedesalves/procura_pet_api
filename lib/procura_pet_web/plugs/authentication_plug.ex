@@ -2,17 +2,14 @@ defmodule ProcuraPetWeb.Plug.Authentication do
   import Plug.Conn
   import Phoenix.Controller
 
-  alias ProcuraPet.{Accounts, Guardian}
+  alias ProcuraPet.{Accounts, Guardian, Accounts.User}
 
-  def init(_params) do
-  end
+  def init(attrs), do: attrs
 
   def call(conn, _params) do
-    with {"authorization", token} <-
-           Enum.find(conn.req_headers, fn item -> match?({"authorization", _}, item) end),
-         ["bearer", token] <- String.split(token, " "),
+    with {:ok, token} <- get_token(conn),
          {:ok, %{"sub" => user_id}} <- Guardian.decode_and_verify(token),
-         %Accounts.User{} = user <- Accounts.get_user!(String.to_integer(user_id)) do
+         %User{} = user <- Accounts.get_user!(String.to_integer(user_id)) do
       assign(conn, :user, user)
     else
       _ ->
@@ -21,5 +18,15 @@ defmodule ProcuraPetWeb.Plug.Authentication do
         |> json(%{error: "token are missing or invalid"})
         |> halt()
     end
+  end
+
+  defp get_token(conn) do
+    [_prefix, token] =
+      conn
+      |> get_req_header("authorization")
+      |> Enum.at(0)
+      |> String.split(" ")
+
+    {:ok, token}
   end
 end
