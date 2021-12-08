@@ -28,5 +28,7 @@ defmodule ProcuraPetWeb.Plug.Authentication do
       |> String.split(" ")
 
     {:ok, token}
+  rescue
+    _error -> :error
   end
 end
