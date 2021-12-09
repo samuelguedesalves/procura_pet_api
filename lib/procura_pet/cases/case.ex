@@ -1,4 +1,6 @@
 defmodule ProcuraPet.Cases.Case do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 

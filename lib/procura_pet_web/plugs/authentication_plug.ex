@@ -1,8 +1,9 @@
 defmodule ProcuraPetWeb.Plug.Authentication do
+  @moduledoc false
+
   import Plug.Conn
   import Phoenix.Controller
-
-  alias ProcuraPet.{Accounts, Guardian, Accounts.User}
+  alias ProcuraPet.{Accounts, Accounts.User, Guardian}
   alias ProcuraPetWeb.ErrorView
 
   def init(attrs), do: attrs

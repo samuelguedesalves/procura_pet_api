@@ -1,5 +1,7 @@
 defmodule ProcuraPet.Authentication do
-  alias ProcuraPet.{Accounts, Guardian, Accounts.User}
+  @moduledoc false
+
+  alias ProcuraPet.{Accounts, Accounts.User, Guardian}
 
   @doc """
   Auth user.

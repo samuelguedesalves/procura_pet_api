@@ -1,7 +1,8 @@
 defmodule ProcuraPet.Accounts.User do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
-  # alias Bcrypt.Base
 
   @derive {Jason.Encoder, except: [:__meta__, :__struct__]}
   schema "users" do

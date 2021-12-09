@@ -1,4 +1,6 @@
 defmodule ProcuraPet.Images.Image do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
