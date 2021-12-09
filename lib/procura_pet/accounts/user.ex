@@ -4,7 +4,7 @@ defmodule ProcuraPet.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, except: [:__meta__, :__struct__]}
+  @derive {Jason.Encoder, except: [:__meta__, :__struct__, :password]}
   schema "users" do
     field :age, :integer
     field :email, :string

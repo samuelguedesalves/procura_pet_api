@@ -1,32 +1,26 @@
 defmodule ProcuraPetWeb.AccountController do
   use ProcuraPetWeb, :controller
   alias ProcuraPet.{Accounts, Authentication}
+  alias ProcuraPetWeb.AccountView
+  alias ProcuraPetWeb.FallbackController
 
-  def login(conn, %{"email" => email, "password" => password}) do
-    case Authentication.auth_user(email, password) do
-      {:ok, %{token: token, user: user}} ->
-        conn
-        |> put_status(:ok)
-        |> json(%{user: user, token: token})
+  action_fallback FallbackController
 
-      {:error, reason} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: reason})
+  def create_account(conn, account) do
+    with {:ok, user} <- Accounts.create_user(account) do
+      conn
+      |> put_status(:ok)
+      |> put_view(AccountView)
+      |> render("created.json", user: user)
     end
   end
 
-  def create_account(conn, account) do
-    case Accounts.create_user(account) do
-      {:ok, user} ->
-        conn
-        |> put_status(:ok)
-        |> json(user)
-
-      {:error, _reason} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: "error at create a new user"})
+  def login(conn, %{"email" => email, "password" => password}) do
+    with {:ok, %{token: token, user: user}} <- Authentication.auth_user(email, password) do
+      conn
+      |> put_status(:ok)
+      |> put_view(AccountView)
+      |> render("login.json", {:ok, %{user: user, token: token}})
     end
   end
 end
