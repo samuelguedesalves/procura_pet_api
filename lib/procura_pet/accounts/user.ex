@@ -9,6 +9,8 @@ defmodule ProcuraPet.Accounts.User do
     field :email, :string
     field :name, :string
     field :password, :string
+    field :state, :string
+    field :city, :string
 
     timestamps()
   end
@@ -16,8 +18,8 @@ defmodule ProcuraPet.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :email, :age, :password])
-    |> validate_required([:name, :email, :age, :password])
+    |> cast(attrs, [:name, :email, :age, :password, :state, :city])
+    |> validate_required([:name, :email, :age, :password, :state, :city])
     |> validate_format(:email, ~r/@/)
     |> put_pass_hash()
     |> unique_constraint(:email)
