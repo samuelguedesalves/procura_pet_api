@@ -3,6 +3,7 @@ defmodule ProcuraPetWeb.Plug.Authentication do
   import Phoenix.Controller
 
   alias ProcuraPet.{Accounts, Guardian, Accounts.User}
+  alias ProcuraPetWeb.ErrorView
 
   def init(attrs), do: attrs
 
@@ -12,16 +13,24 @@ defmodule ProcuraPetWeb.Plug.Authentication do
          %User{} = user <- Accounts.get_user!(String.to_integer(user_id)) do
       assign(conn, :user, user)
     else
-      _ ->
+      {:error, %ArgumentError{}} ->
         conn
         |> put_status(:unauthorized)
-        |> json(%{error: "token are missing or invalid"})
+        |> put_view(ErrorView)
+        |> render("auth.json", %{error: "invalid token"})
+        |> halt()
+
+      {:error, reason} ->
+        conn
+        |> put_status(:unauthorized)
+        |> put_view(ErrorView)
+        |> render("auth.json", %{error: reason})
         |> halt()
     end
   end
 
   defp get_token(conn) do
-    [_prefix, token] =
+    ["Bearer", token] =
       conn
       |> get_req_header("authorization")
       |> Enum.at(0)
@@ -29,6 +38,6 @@ defmodule ProcuraPetWeb.Plug.Authentication do
 
     {:ok, token}
   rescue
-    _error -> :error
+    _error -> {:error, "unformated token"}
   end
 end
