@@ -2,6 +2,7 @@ defmodule ProcuraPetWeb.ImageController do
   use ProcuraPetWeb, :controller
 
   alias ProcuraPetWeb.ImageView
+  alias ProcuraPet.{Images, Images.Image}
 
   plug ProcuraPetWeb.Plug.Authentication
   action_fallback ProcuraPetWeb.FallbackController
@@ -9,7 +10,9 @@ defmodule ProcuraPetWeb.ImageController do
   @file_extensions ~w[.png .jpg .jpeg]
 
   def upload_image(conn, %{"image" => image}) do
-    with {:ok, filename} <- save_image(image) do
+    with {:ok, filename} <- save_image(image),
+         attrs <- %{name: filename, user_fk: conn.assigns.user.id},
+         {:ok, %Image{}} <- Images.create_image(attrs) do
       conn
       |> put_status(:ok)
       |> put_view(ImageView)

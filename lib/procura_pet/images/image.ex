@@ -12,7 +12,7 @@ defmodule ProcuraPet.Images.Image do
   @doc false
   def changeset(image, attrs) do
     image
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :user_fk])
+    |> validate_required([:name, :user_fk])
   end
 end
